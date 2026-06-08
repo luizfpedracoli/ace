@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroConsciente Ultra</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* ===== BASE ===== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins;
+scroll-behavior:smooth;
+}
+
+:root{
+--bg:#ffffff;
+--text:#111;
+--primary:#2e7d32;
+--accent:#ffc107;
+--card:#f5f5f5;
+}
+
+body.dark{
+--bg:#0f0f0f;
+--text:#fff;
+--card:#1e1e1e;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+transition:.3s;
+}
+
+/* ===== PROGRESS ===== */
+#progress{
+position:fixed;
+top:0;
+left:0;
+height:4px;
+width:0%;
+background:var(--accent);
+z-index:9999;
+}
+
+/* ===== NAV ===== */
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 8%;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(10px);
+color:white;
+z-index:1000;
+}
+
+.menu{
+display:flex;
+gap:20px;
+list-style:none;
+}
+
+.menu a{
+color:white;
+text-decoration:none;
+}
+
+#theme{
+background:var(--accent);
+border:none;
+padding:8px 12px;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* ===== HERO ===== */
+header{
+height:100vh;
+background:url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1800&q=80');
+background-size:cover;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:white;
+}
+
+header h1{
+font-size:3.5rem;
+max-width:900px;
+}
+
+/* ===== SECTIONS ===== */
+section{
+padding:90px 10%;
+}
+
+/* ===== CARDS ===== */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
+}
+
+.card{
+background:var(--card);
+padding:25px;
+border-radius:15px;
+}
+
+/* ===== COUNTER ===== */
+.counter{
+font-size:2.5rem;
+font-weight:bold;
+color:var(--primary);
+}
+
+/* ===== CALCULADORA ===== */
+input,button{
+width:100%;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+border:none;
+}
+
+button{
+background:var(--primary);
+color:white;
+cursor:pointer;
+}
+
+/* ===== FAQ ===== */
+.faq-item{
+margin-bottom:10px;
+}
+
+.faq-q{
+background:var(--primary);
+color:white;
+padding:15px;
+cursor:pointer;
+border-radius:10px;
+}
+
+.faq-a{
+display:none;
+padding:15px;
+background:var(--card);
+}
+
+/* ===== CHART ===== */
+canvas{
+max-width:600px;
+margin:auto;
+display:block;
+}
+
+/* ===== WHATSAPP ===== */
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25d366;
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+color:white;
+text-decoration:none;
+}
+
+/* ===== TOP ===== */
+#top{
+position:fixed;
+bottom:90px;
+right:20px;
+background:var(--accent);
+padding:10px;
+border-radius:50%;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="progress"></div>
+
+<nav>
+<div><b>AGROCONSCIENTE ULTRA</b></div>
+
+<ul class="menu">
+<li><a href="#inicio">Início</a></li>
+<li><a href="#dados">Dados</a></li>
+<li><a href="#grafico">Gráfico</a></li>
+<li><a href="#calc">Calculadora</a></li>
+</ul>
+
+<button id="theme">🌙</button>
+</nav>
+
+<header id="inicio">
+<h1>O impacto global do desperdício de alimentos</h1>
+</header>
+
+<section id="dados">
+
+<h2>Dados globais</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="counter" data-target="1300">0</div>
+<p>Milhões de toneladas</p>
+</div>
+
+<div class="card">
+<div class="counter" data-target="30">0</div>
+<p>% produção perdida</p>
+</div>
+
+<div class="card">
+<div class="counter" data-target="8">0</div>
+<p>% emissões globais</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="grafico">
+
+<h2>Impacto global</h2>
+
+<canvas id="chart"></canvas>
+
+</section>
+
+<section id="calc">
+
+<h2>Calculadora de impacto</h2>
+
+<input id="kg" type="number" placeholder="Kg por mês">
+<button onclick="calc()">Calcular</button>
+
+<h3 id="res"></h3>
+
+</section>
+
+<section id="faq">
+
+<h2>FAQ</h2>
+
+<div class="faq-item">
+<div class="faq-q">Por que isso importa?</div>
+<div class="faq-a">Porque afeta economia, meio ambiente e sociedade.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-q">Como reduzir?</div>
+<div class="faq-a">Planejamento e tecnologia no agronegócio.</div>
+</div>
+
+</section>
+
+<a class="whatsapp" href="https://wa.me/5541999999999">💬</a>
+
+<div id="top">↑</div>
+
+<script>
+
+/* PROGRESS */
+window.addEventListener("scroll",()=>{
+let h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+let s=document.documentElement.scrollTop;
+document.getElementById("progress").style.width=(s/h)*100+"%";
+});
+
+/* THEME */
+const t=document.getElementById("theme");
+t.onclick=()=>{
+document.body.classList.toggle("dark");
+localStorage.setItem("theme",document.body.classList.contains("dark")?"dark":"light");
+};
+
+if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
+
+/* COUNTER */
+const counters=document.querySelectorAll(".counter");
+
+counters.forEach(c=>{
+let u=()=>{
+let t=+c.dataset.target;
+let v=+c.innerText;
+let i=t/100;
+if(v<t){
+c.innerText=Math.ceil(v+i);
+setTimeout(u,20);
+}else c.innerText=t;
+};
+u();
+});
+
+/* FAQ */
+document.querySelectorAll(".faq-q").forEach(q=>{
+q.onclick=()=>{
+q.nextElementSibling.style.display=
+q.nextElementSibling.style.display==="block"?"none":"block";
+};
+});
+
+/* CALC */
+function calc(){
+let kg=document.getElementById("kg").value;
+if(!kg)return;
+
+document.getElementById("res").innerHTML=`
+<p>${kg*12} kg por ano</p>
+<p>${kg*12*1000} litros de água</p>
+<p>R$ ${(kg*12*8).toFixed(2)} prejuízo</p>
+`;
+}
+
+/* CHART */
+new Chart(document.getElementById("chart"),{
+type:"doughnut",
+data:{
+labels:["Produzido","Desperdiçado"],
+datasets:[{
+data:[70,30],
+backgroundColor:["#2e7d32","#ffc107"]
+}]
+}
+});
+
+/* TOP */
+document.getElementById("top").onclick=()=>{
+window.scrollTo({top:0,behavior:"smooth"});
+};
+
+</script>
+
+</body>
+</html>
